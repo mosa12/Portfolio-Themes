@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mosaraf | Systems × AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --accent: #444444;          /* mid-gray for subtle accents */
+      --glow: rgba(0,0,0,0.12);
+      --glass-bg: rgba(255, 255, 255, 0.82);   /* mostly opaque white with blur */
+      --glass-border: rgba(0, 0, 0, 0.18);
+      --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.15);
+      --shadow-inset: inset 0 2px 8px rgba(0,0,0,0.08);
+      --border: rgba(0,0,0,0.22);
+      --gray-light: #eeeeee;
+      --gray-dark: #333333;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Neural Network Background ── (unchanged colors, but canvas opacity tuned for B&W contrast) */
+    #neural-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.35;           /* slightly stronger so cyan pops against pure B&W */
+    }
+
+    /* ── Glassmorphism (grayscale version) ── */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.6rem;
+      box-shadow: var(--shadow-soft), var(--shadow-inset);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px var(--glow), var(--shadow-soft), var(--shadow-inset);
+    }
+
+    /* ── Layout ── */
+    section {
+      padding: clamp(6rem, 14vw, 10rem) 1.5rem;
+      max-width: 1240px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    h1, h2, h3 {
+      font-family: 'Patrick Hand', cursive;
+      line-height: 1.1;
+      color: var(--text);
+    }
+    h1 { font-size: clamp(3.2rem, 10vw, 5.6rem); }
+    h2 { font-size: clamp(2.5rem, 8vw, 4rem); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2.4rem;
+      margin: 0.7rem;
+      border: 1px solid var(--accent);
+      border-radius: 9999px;
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.35s ease;
+    }
+    .btn:hover,
+    .btn:focus-visible {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 0 30px var(--glow);
+      transform: translateY(-4px);
+    }
+
+    /* ── Groups ── */
+    .bubbles, .projects, .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.2rem;
+      justify-content: center;
+      margin-top: 3.5rem;
+    }
+    .bubble, .card {
+      width: 100%;
+      max-width: 320px;
+      padding: 2.2rem 2rem;
+      text-align: center;
+      color: var(--text);
+    }
+    .skill {
+      padding: 0.9rem 1.8rem;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      transition: all 0.35s;
+      color: var(--text);
+    }
+    .skill:hover {
+      background: var(--accent);
+      color: #ffffff;
+      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--glow);
+    }
+
+    /* ── Contact ── */
+    .contact-box {
+      max-width: 540px;
+      margin: 5rem auto 0;
+      padding: 4rem 3rem;
+      text-align: center;
+    }
+    footer {
+      padding: 5rem 1.5rem 3rem;
+      text-align: center;
+      font-size: 0.95rem;
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
+      color: var(--text);
+    }
+    section > h2 {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2.5rem;
+    }
+    section > h2::after {
+      content: "";
+      position: absolute;
+      bottom: -1rem;
+      left: 50%;
+      width: 45%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    /* Optional doodle-like touch: slightly rougher font feel if desired */
+    h1, h2, h3 {
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="neural-bg"></canvas>
+
+  <main>
+    <section class="hero">
+      <h1>Mosaraf</h1>
+      <p style="font-size:1.35rem; max-width:50ch; margin:2.5rem auto; opacity:0.85; color: var(--text);">
+        Architecting intelligent systems — where code meets cognition.
+      </p>
+      <div>
+        <a href="projects.html" class="btn">Projects</a>
+        <a href="#contact" class="btn">Connect</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>About</h2>
+      <div class="bubbles">
+        <div class="bubble glass">Solving complex problems with precise technology</div>
+        <div class="bubble glass">Exploring machine intelligence & decentralized systems</div>
+        <div class="bubble glass">Building from curiosity to production reality</div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="projects">
+        <div class="card glass">
+          <h3>Blockchain Verification</h3>
+          <p>Secure, tamper-evident document authentication with zero-knowledge integrity.</p>
+        </div>
+        <div class="card glass">
+          <h3>ML Form Intelligence</h3>
+          <p>Neural-powered prediction and autofill embedded in the browser.</p>
+        </div>
+        <div class="card glass">
+          <h3>Android Interface System</h3>
+          <p>Structured, motion-rich UI layer implemented in modern Compose.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div class="skills">
+        <div class="skill">Python</div>
+        <div class="skill">Machine Learning</div>
+        <div class="skill">Neural Architectures</div>
+        <div class="skill">Solidity & EVM</div>
+        <div class="skill">React / Next.js</div>
+        <div class="skill">System Design</div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="contact-box glass">
+        <p style="margin-bottom:2.2rem; font-size:1.15rem; opacity:0.9; color: var(--text);">
+          Open to deep technical discussions, collaborations, or new challenges.
+        </p>
+        <a href="mailto:mosaraf@example.com?subject=Contact%20—%20Mosaraf" class="btn">Message</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 Mosaraf — Intelligence Engineered
+  </footer>
+
+  <script>
+    // ── Neural network script (exactly the same as your last version) ──
+    const canvas = document.getElementById('neural-bg');
+    const ctx = canvas.getContext('2d');
+
+    let w, h, particles = [], mouse = { x: null, y: null, active: false };
+
+    const config = {
+      particleCount: 100,
+      maxDistance: 180,
+      baseHue: 195,
+      lineOpacity: 0.4,
+      particleOpacity: 0.75,
+      speed: 0.45,
+      mouseRadius: 180
+    };
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.vx = (Math.random() - 0.5) * config.speed;
+        this.vy = (Math.random() - 0.5) * config.speed;
+        this.size = Math.random() * 2.8 + 1;
+        this.baseHue = config.baseHue;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > w) this.vx *= -1;
+        if (this.y < 0 || this.y > h) this.vy *= -1;
+        if (mouse.active) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < config.mouseRadius && dist > 0) {
+            const force = (config.mouseRadius - dist) / config.mouseRadius * 0.08;
+            this.vx += dx / dist * force;
+            this.vy += dy / dist * force;
+          }
+        }
+      }
+      draw() {
+        let alpha = config.particleOpacity;
+        let hue = this.baseHue;
+        if (mouse.active) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < config.mouseRadius) {
+            const influence = 1 - dist / config.mouseRadius;
+            alpha = config.particleOpacity + influence * 0.6;
+            hue = this.baseHue - 40 * influence;
+          }
+        }
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${hue}, 90%, 55%, ${alpha})`;
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      resize();
+      particles = Array.from({ length: config.particleCount }, () => new Particle());
+    }
+
+    function connect() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < config.maxDistance) {
+            let alpha = (1 - dist / config.maxDistance) ** 1.4 * config.lineOpacity;
+            if (mouse.active) {
+              const mx = (particles[i].x + particles[j].x) / 2;
+              const my = (particles[i].y + particles[j].y) / 2;
+              const mdist = Math.hypot(mouse.x - mx, mouse.y - my);
+              if (mdist < config.mouseRadius) {
+                alpha += (1 - mdist / config.mouseRadius) * 0.5;
+              }
+            }
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `hsla(${config.baseHue}, 80%, 50%, ${Math.min(0.85, alpha)})`;
+            ctx.lineWidth = 1.2 + alpha * 1.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.fillStyle = 'rgba(255,255,255,0.04)';
+      ctx.fillRect(0, 0, w, h);
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      connect();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    });
+
+    window.addEventListener('mouseout', () => {
+      mouse.active = false;
+    });
+
+    window.addEventListener('resize', () => {
+      resize();
+      init();
+    });
+
+    init();
+    animate();
+  </script>
+
+</body>
+</html>

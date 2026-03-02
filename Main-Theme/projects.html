@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>mosaraf@quantum-core:~/multiverse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050508;
+      --quantum-cyan: #00f2ff;
+      --quantum-purple: #7000ff;
+      --quantum-dim: #00666b;
+      --glow: rgba(0, 242, 255, 0.4);
+      --border: rgba(112, 0, 255, 0.5);
+      --text: #e0faff;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Quantum Background Layer */
+    #quantum-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: radial-gradient(circle at center, #0a0a1a 0%, #050508 100%);
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
+      z-index: -1;
+    }
+
+    header {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5, 5, 8, 0.8);
+      backdrop-filter: blur(12px);
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--quantum-cyan), var(--quantum-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 15px var(--glow));
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle { 
+      font-size: 1rem; 
+      color: var(--quantum-cyan);
+      opacity: 0.8; 
+      letter-spacing: 0.2em; 
+    }
+
+    .terminal {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .node-path {
+      color: var(--quantum-purple);
+      font-weight: bold;
+      margin: 1rem 0;
+      filter: drop-shadow(0 0 5px var(--quantum-purple));
+    }
+
+    .project {
+      margin: 2rem 0;
+      padding: 2.5rem;
+      position: relative;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 242, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .project::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--quantum-cyan));
+      transition: 0.5s;
+    }
+
+    .project:hover {
+      background: rgba(0, 242, 255, 0.05);
+      border-color: var(--quantum-cyan);
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .project:hover::before {
+      left: 100%;
+    }
+
+    .project h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--quantum-cyan);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+      border: 1px solid var(--quantum-cyan);
+      font-size: 0.8rem;
+      color: var(--quantum-cyan);
+      margin-top: 1.5rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .back-btn {
+      display: block;
+      width: fit-content;
+      margin: 4rem auto;
+      padding: 1rem 3rem;
+      border: 1px solid var(--quantum-cyan);
+      color: var(--quantum-cyan);
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      transition: 0.4s;
+      position: relative;
+    }
+
+    .back-btn:hover {
+      background: var(--quantum-cyan);
+      color: var(--bg);
+      box-shadow: 0 0 30px var(--quantum-cyan);
+    }
+
+    footer {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="quantum-canvas"></canvas>
+  <div class="vignette"></div>
+
+  <header>
+    <h1>Quantum Nodes</h1>
+    <div class="subtitle">OBSERVING SUPERPOSITION: projects.sys</div>
+  </header>
+
+  <div class="terminal">
+    <div class="node-path">ψ(x,t) ➔ [DOCUMENT_AUTH]</div>
+    <div class="project">
+      <h3>Blockchain Verification</h3>
+      <p>Secure, tamper-evident document authentication infrastructure utilizing Zero-knowledge proofs.</p>
+      <div class="status-badge">Entangled • Live</div>
+    </div>
+
+    <div class="node-path">ψ(x,t) ➔ [ML_INFERENCE]</div>
+    <div class="project">
+      <h3>ML Form Intelligence</h3>
+      <p>Browser-native predictive engine. Privacy-first local inference using Transformer models.</p>
+      <div class="status-badge">Probability: 93.4%</div>
+    </div>
+
+    <div class="node-path">ψ(x,t) ➔ [UI_FRAMEWORK]</div>
+    <div class="project">
+      <h3>Android Interface System</h3>
+      <p>Motion-rich UI framework layer. Custom animation engine optimized for 60fps superposition.</p>
+      <div class="status-badge">Stable State</div>
+    </div>
+
+    <a href="index.html" class="back-btn">COLLAPSE TO CORE</a>
+  </div>
+
+  <footer>
+    QUANTUM STATE 0xQBIT — NOISE REDUCTION ACTIVE — 2026
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('quantum-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function init() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = [];
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2,
+          speedX: (Math.random() - 0.5) * 0.5,
+          speedY: (Math.random() - 0.5) * 0.5
+        });
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach((p, i) => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x > canvas.width) p.x = 0;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.y > canvas.height) p.y = 0;
+        if (p.y < 0) p.y = canvas.height;
+
+        ctx.fillStyle = 'rgba(0, 242, 255, 0.5)';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connect particles (Quantum Entanglement)
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = p.x - particles[j].x;
+          const dy = p.y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 150) {
+            ctx.strokeStyle = `rgba(112, 0, 255, ${1 - dist/150})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    animate();
+  </script>
+</body>
+</html>
