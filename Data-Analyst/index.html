@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mosaraf Hossain • Data Analyst • AI & Data Science</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0a0a0f;
+      color: #e2e8f0;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .sidebar {
+      transition: transform 0.3s ease-in-out;
+    }
+    .neon-cyan {
+      color: #22d3ee;
+      text-shadow: 0 0 10px rgba(34,211,238,0.4);
+    }
+    .card {
+      background: rgba(30,41,59,0.65);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(34,211,238,0.14);
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      border-color: rgba(34,211,238,0.4);
+      transform: translateY(-2px);
+    }
+    .chart-container {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+    .nav-item {
+      position: relative;
+      transition: all 0.2s;
+    }
+    .nav-item.active,
+    .nav-item:hover {
+      background: rgba(34, 211, 238, 0.09);
+      color: #22d3ee !important;
+    }
+    .nav-item.active::before,
+    .nav-item:hover::before {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #22d3ee;
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 0 12px rgba(34,211,238,0.5);
+    }
+    .kpi-card {
+      transition: transform 0.2s;
+    }
+    .kpi-card:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-[#0a0a0f] to-[#0f172a]">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-50 w-72 bg-[#0f172a]/95 border-r border-slate-800/50 transform -translate-x-full lg:translate-x-0">
+    <div class="p-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold mono text-xl">MH</div>
+        <span class="text-xl font-semibold tracking-tight neon-cyan">MOSARAF</span>
+      </div>
+      <button id="close-sidebar" class="lg:hidden text-slate-400 hover:text-cyan-400">
+        <i class="fa-solid fa-xmark text-2xl"></i>
+      </button>
+    </div>
+
+    <nav class="mt-8 px-3 space-y-1">
+      <a href="#home" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-cyan-400 transition">
+        <i class="fa-solid fa-gauge w-5"></i> Dashboard
+      </a>
+      <a href="#about" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-cyan-400 transition">
+        <i class="fa-solid fa-user w-5"></i> About
+      </a>
+      <a href="#skills" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-cyan-400 transition">
+        <i class="fa-solid fa-microchip w-5"></i> Skills & Stack
+      </a>
+      <a href="#projects" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-cyan-400 transition">
+        <i class="fa-solid fa-folder-tree w-5"></i> Projects & Cases
+      </a>
+      <a href="#models" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-cyan-400 transition">
+        <i class="fa-solid fa-brain w-5"></i> ML Models
+      </a>
+      <a href="#github" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-cyan-400 transition">
+        <i class="fa-brands fa-github w-5"></i> GitHub Activity
+      </a>
+    </nav>
+
+    <div class="absolute bottom-8 left-6 right-6">
+      <a href="mailto:mosaraf.hossain@example.com" class="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl text-white font-medium hover:brightness-110 transition">
+        <i class="fa-solid fa-paper-plane"></i> Get in Touch
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="lg:ml-72 min-h-screen">
+    <!-- TOP BAR -->
+    <header class="sticky top-0 z-40 bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800/50">
+      <div class="px-6 py-4 flex items-center justify-between">
+        <button id="open-sidebar" class="lg:hidden text-slate-300 hover:text-cyan-400">
+          <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+        <h1 class="text-xl font-semibold mono neon-cyan">Data • AI • Analytics Portfolio</h1>
+        <a href="https://github.com/YOUR_USERNAME" target="_blank" class="text-slate-300 hover:text-cyan-400">
+          <i class="fa-brands fa-github text-2xl"></i>
+        </a>
+      </div>
+    </header>
+
+    <div class="p-6 lg:p-10 max-w-7xl mx-auto space-y-16">
+
+      <!-- HERO / OVERVIEW -->
+      <section id="home" class="grid lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 card rounded-2xl p-8">
+          <h2 class="text-4xl lg:text-5xl font-bold tracking-tight mb-4 neon-cyan">Mosaraf Hossain</h2>
+          <p class="text-xl text-slate-400 mb-6">Data Analyst • ML Practitioner • Hyderabad, TS</p>
+          <p class="text-slate-300 leading-relaxed max-w-3xl">
+            5+ years building production analytics & hybrid ML systems.<br>
+            Focus: explainable models, time-series, churn, customer lifetime value, revenue protection.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <span class="px-4 py-2 bg-slate-800/60 rounded-full text-cyan-300 mono text-sm">Python • SQL • Spark</span>
+            <span class="px-4 py-2 bg-slate-800/60 rounded-full text-cyan-300 mono text-sm">XGBoost • LightGBM • PyTorch</span>
+            <span class="px-4 py-2 bg-slate-800/60 rounded-full text-cyan-300 mono text-sm">GCP • Snowflake • MLflow</span>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="card rounded-2xl p-6 text-center kpi-card">
+            <div class="text-5xl font-bold mono neon-cyan">94.2%</div>
+            <div class="text-sm text-slate-400 mt-2">Model Accuracy</div>
+          </div>
+          <div class="card rounded-2xl p-6 text-center kpi-card">
+            <div class="text-5xl font-bold mono neon-cyan">₹4.8 Cr</div>
+            <div class="text-sm text-slate-400 mt-2">Revenue Protected</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- KPI BAR -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="card p-5 text-center border-t-4 border-cyan-500/60 kpi-card">
+          <div class="text-3xl lg:text-4xl font-bold mono neon-cyan">94.2%</div>
+          <div class="text-xs text-slate-400 mt-1">Avg Accuracy</div>
+        </div>
+        <div class="card p-5 text-center border-t-4 border-emerald-500/60 kpi-card">
+          <div class="text-3xl lg:text-4xl font-bold mono neon-cyan">4.8%</div>
+          <div class="text-xs text-slate-400 mt-1">Best MAPE</div>
+        </div>
+        <div class="card p-5 text-center border-t-4 border-violet-500/60 kpi-card">
+          <div class="text-3xl lg:text-4xl font-bold mono neon-cyan">0.974</div>
+          <div class="text-xs text-slate-400 mt-1">Best ROC-AUC</div>
+        </div>
+        <div class="card p-5 text-center border-t-4 border-amber-500/60 kpi-card">
+          <div class="text-3xl lg:text-4xl font-bold mono neon-cyan">₹4.8 Cr</div>
+          <div class="text-xs text-slate-400 mt-1">Business Impact</div>
+        </div>
+        <div class="card p-5 text-center border-t-4 border-pink-500/60 kpi-card">
+          <div class="text-3xl lg:text-4xl font-bold mono neon-cyan">18</div>
+          <div class="text-xs text-slate-400 mt-1">End-to-End Projects</div>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <section id="skills">
+        <h3 class="text-3xl font-semibold mb-8 neon-cyan">Core Competencies</h3>
+        <div class="card rounded-2xl p-8">
+          <div class="chart-container">
+            <canvas id="skillsRadar"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects">
+        <h3 class="text-3xl font-semibold mb-8 neon-cyan">Key Projects & Case Studies</h3>
+        <div class="grid lg:grid-cols-2 gap-8">
+
+          <div class="card rounded-2xl overflow-hidden cursor-pointer" onclick="openProjectModal(1)">
+            <div class="p-6">
+              <h4 class="text-2xl font-semibold mb-2">Churn Prediction Engine</h4>
+              <p class="text-slate-400 mb-4">Telecom • 18% churn reduction • ₹4.2 Cr saved</p>
+              <div class="chart-container">
+                <canvas id="churnBar"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl overflow-hidden cursor-pointer" onclick="openProjectModal(2)">
+            <div class="p-6">
+              <h4 class="text-2xl font-semibold mb-2">Demand Forecasting Hybrid</h4>
+              <p class="text-slate-400 mb-4">Retail • MAPE 12.4% → 4.8%</p>
+              <div class="chart-container">
+                <canvas id="forecastLine"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl overflow-hidden cursor-pointer lg:col-span-2" onclick="openProjectModal(3)">
+            <div class="p-6">
+              <h4 class="text-2xl font-semibold mb-2">Customer 360° Segmentation</h4>
+              <p class="text-slate-400 mb-4">E-commerce • 6 high-value clusters identified</p>
+              <div class="chart-container">
+                <canvas id="segmentDoughnut"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ML MODELS -->
+      <section id="models">
+        <h3 class="text-3xl font-semibold mb-8 neon-cyan">Production ML Models</h3>
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="card rounded-2xl p-6">
+            <h4 class="text-xl font-semibold mb-3">ChurnGuard-XGB v2</h4>
+            <p class="text-slate-400 text-sm mb-6">ROC-AUC 0.974 • SHAP explainability</p>
+            <div class="chart-container">
+              <canvas id="modelRadar1"></canvas>
+            </div>
+          </div>
+          <div class="card rounded-2xl p-6">
+            <h4 class="text-xl font-semibold mb-3">Prophet-LSTM Fusion</h4>
+            <p class="text-slate-400 text-sm mb-6">Directional Accuracy 93%</p>
+            <div class="chart-container">
+              <canvas id="modelRadar2"></canvas>
+            </div>
+          </div>
+          <div class="card rounded-2xl p-6">
+            <h4 class="text-xl font-semibold mb-3">BERT-Aspect Sentiment</h4>
+            <p class="text-slate-400 text-sm mb-6">Macro F1 0.918 • LoRA</p>
+            <div class="chart-container">
+              <canvas id="modelRadar3"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GITHUB -->
+      <section id="github">
+        <h3 class="text-3xl font-semibold mb-8 neon-cyan">Recent GitHub Activity</h3>
+        <div id="github-repos" class="grid lg:grid-cols-3 gap-6">
+          <!-- filled by JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- PROJECT MODAL -->
+  <div id="projectModal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50 p-4">
+    <div class="card rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-auto p-8 relative">
+      <button id="closeModal" class="absolute top-5 right-6 text-4xl text-slate-400 hover:text-white leading-none">&times;</button>
+      <h3 id="modalTitle" class="text-3xl font-bold mb-6 neon-cyan"></h3>
+      <div id="modalContent" class="text-slate-300 space-y-6 leading-relaxed"></div>
+    </div>
+  </div>
+
+  <script>
+    // ────────────────────────────────────────────────
+    // Sidebar toggle
+    // ────────────────────────────────────────────────
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('open-sidebar').onclick = () => sidebar.classList.remove('-translate-x-full');
+    document.getElementById('close-sidebar').onclick = () => sidebar.classList.add('-translate-x-full');
+
+    // ────────────────────────────────────────────────
+    // Active nav highlight on scroll
+    // ────────────────────────────────────────────────
+    const navLinks = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('section[id]');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (scrollY >= sectionTop - 220) current = section.getAttribute('id');
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // ────────────────────────────────────────────────
+    // Charts
+    // ────────────────────────────────────────────────
+    const radarConfig = (data, label = 'Proficiency') => ({
+      type: 'radar',
+      data: {
+        labels: ['Python/SQL', 'ML Modeling', 'Viz & BI', 'MLOps', 'Statistics', 'Big Data'],
+        datasets: [{
+          label,
+          data,
+          backgroundColor: 'rgba(34,211,238,0.18)',
+          borderColor: '#22d3ee',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#22d3ee',
+          pointBorderColor: '#0f172a',
+          pointRadius: 4
+        }]
+      },
+      options: {
+        scales: {
+          r: {
+            min: 0,
+            max: 100,
+            ticks: { stepSize: 20, backdropColor: 'transparent', color: '#94a3b8' },
+            grid: { color: 'rgba(255,255,255,0.07)' },
+            angleLines: { color: 'rgba(255,255,255,0.07)' }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    new Chart(document.getElementById('skillsRadar'), radarConfig([92, 88, 95, 82, 90, 85]));
+    new Chart(document.getElementById('modelRadar1'), radarConfig([94, 96, 89, 91, 93, 88], 'ChurnGuard'));
+    new Chart(document.getElementById('modelRadar2'), radarConfig([88, 95, 92, 85, 90, 93], 'Forecast'));
+    new Chart(document.getElementById('modelRadar3'), radarConfig([90, 92, 96, 87, 89, 84], 'Sentiment'));
+
+    // Sample project charts
+    new Chart(document.getElementById('churnBar'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'Churn Rate %',
+          data: [12.4, 11.8, 9.7, 8.2, 7.1, 6.3],
+          backgroundColor: '#f87171',
+          borderRadius: 6
+        }]
+      },
+      options: { scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.06)' } } } }
+    });
+
+    new Chart(document.getElementById('forecastLine'), {
+      type: 'line',
+      data: {
+        labels: ['W1','W2','W3','W4','W5','W6','W7','W8'],
+        datasets: [
+          { label: 'Actual', data: [420,480,510,490,530,580,610,590], borderColor: '#22d3ee', tension: 0.3, fill: false },
+          { label: 'Forecast', data: [null,null,null,null,525,575,605,595], borderColor: '#a78bfa', borderDash: [6,4], tension: 0.3 }
+        ]
+      },
+      options: {
+        interaction: { intersect: false },
+        scales: { y: { grid: { color: 'rgba(255,255,255,0.06)' } } }
+      }
+    });
+
+    new Chart(document.getElementById('segmentDoughnut'), {
+      type: 'doughnut',
+      data: {
+        labels: ['High Value','Loyal','At Risk','Lost','New','Occasional'],
+        datasets: [{
+          data: [28,22,18,12,10,10],
+          backgroundColor: ['#22d3ee','#8b5cf6','#f87171','#fbbf24','#34d399','#60a5fa'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        cutout: '62%',
+        plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1' } } }
+      }
+    });
+
+    // ────────────────────────────────────────────────
+    // Project modal
+    // ────────────────────────────────────────────────
+    function openProjectModal(id) {
+      const data = {
+        1: {
+          title: "Churn Prediction Engine",
+          content: `
+            <p class="text-lg">Telecom customer churn prediction deployed in production.</p>
+            <ul class="list-disc pl-5 space-y-2 mt-4">
+              <li>XGBoost + SHAP explainability</li>
+              <li>Real-time scoring API (GCP Vertex AI)</li>
+              <li>18% relative churn reduction</li>
+              <li>Estimated business value: ₹4.2 Cr / year</li>
+              <li>Stack: Python, XGBoost, FastAPI, MLflow, BigQuery</li>
+            </ul>
+          `
+        },
+        2: {
+          title: "Demand Forecasting Hybrid Model",
+          content: `
+            <p class="text-lg">Retail sales forecasting – hybrid statistical + deep learning approach.</p>
+            <ul class="list-disc pl-5 space-y-2 mt-4">
+              <li>Prophet (trend/seasonality) + LSTM (residuals)</li>
+              <li>MAPE improved from 12.4% to 4.8%</li>
+              <li>Airflow DAG + BigQuery scheduled retraining</li>
+              <li>Used for inventory & promotion planning</li>
+            </ul>
+          `
+        },
+        3: {
+          title: "Customer 360° Segmentation",
+          content: `
+            <p class="text-lg">E-commerce customer segmentation using behavioral + transactional features.</p>
+            <ul class="list-disc pl-5 space-y-2 mt-4">
+              <li>K-means + UMAP + sentence embeddings</li>
+              <li>6 stable, interpretable segments</li>
+              <li>Enabled personalized campaigns & CLV modeling</li>
+              <li>Stack: PySpark, scikit-learn, sentence-transformers</li>
+            </ul>
+          `
+        }
+      };
+
+      document.getElementById('modalTitle').textContent = data[id].title;
+      document.getElementById('modalContent').innerHTML = data[id].content;
+      document.getElementById('projectModal').classList.remove('hidden');
+    }
+
+    document.getElementById('closeModal')?.addEventListener('click', () => {
+      document.getElementById('projectModal').classList.add('hidden');
+    });
+
+    document.getElementById('projectModal')?.addEventListener('click', e => {
+      if (e.target === document.getElementById('projectModal')) {
+        document.getElementById('projectModal').classList.add('hidden');
+      }
+    });
+
+    // ────────────────────────────────────────────────
+    // GitHub repos (change username!)
+    // ────────────────────────────────────────────────
+    fetch('https://api.github.com/users/YOUR_GITHUB_USERNAME/repos?sort=updated&per_page=6')
+      .then(r => r.json())
+      .then(repos => {
+        const container = document.getElementById('github-repos');
+        if (!repos.length) {
+          container.innerHTML = '<p class="text-slate-400 col-span-3 text-center py-12">No recent public repositories found.</p>';
+          return;
+        }
+        repos.forEach(r => {
+          container.innerHTML += `
+            <a href="${r.html_url}" target="_blank" class="card rounded-2xl p-6 hover:border-cyan-500/50 transition block">
+              <h4 class="font-semibold mb-2 truncate">${r.name}</h4>
+              <p class="text-sm text-slate-400 mb-4 line-clamp-2">${r.description || 'No description provided'}</p>
+              <div class="flex justify-between text-sm text-slate-500">
+                <span><i class="fa-solid fa-star mr-1"></i>${r.stargazers_count}</span>
+                <span class="text-cyan-400">${r.language || '—'}</span>
+              </div>
+            </a>`;
+        });
+      })
+      .catch(() => {
+        document.getElementById('github-repos').innerHTML = '<p class="text-amber-400 col-span-3 text-center py-12">Could not load GitHub repositories</p>';
+      });
+  </script>
+</body>
+</html>
